@@ -1,0 +1,1187 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mi Primera Cartera de Inversión</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+:root {
+  --bg: #f4f7fc;
+  --navy: #0b1f4b;
+  --navy2: #163070;
+  --blue: #1a56db;
+  --blue2: #2563eb;
+  --blue3: #3b82f6;
+  --blue-light: #dbeafe;
+  --blue-pale: #eff6ff;
+  --accent: #0ea5e9;
+  --gold: #f59e0b;
+  --text: #0f172a;
+  --text2: #334155;
+  --text3: #64748b;
+  --border: #e2e8f0;
+  --border2: #cbd5e1;
+  --surface: #ffffff;
+  --surface2: #f8faff;
+  --green: #10b981;
+  --green-dim: #d1fae5;
+  --amber: #f59e0b;
+  --amber-dim: #fef3c7;
+  --red: #ef4444;
+  --red-dim: #fee2e2;
+  --correct: #10b981;
+  --shadow: 0 1px 3px rgba(11,31,75,0.08), 0 4px 16px rgba(11,31,75,0.06);
+  --shadow-lg: 0 4px 24px rgba(11,31,75,0.12);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 16px;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* ── HEADER ── */
+header {
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy2) 100%);
+  color: #fff;
+  padding: 0;
+  position: sticky; top: 0; z-index: 100;
+  box-shadow: 0 2px 20px rgba(11,31,75,0.3);
+}
+.header-inner {
+  max-width: 980px; margin: 0 auto;
+  padding: 1rem 1.5rem;
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+}
+.header-logo { display: flex; align-items: center; gap: 12px; }
+.header-icon {
+  width: 44px; height: 44px; border-radius: 10px;
+  background: rgba(255,255,255,0.15);
+  border: 1.5px solid rgba(255,255,255,0.25);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px;
+}
+.header-titles h1 { font-family: 'DM Serif Display', serif; font-size: 1.1rem; line-height: 1.2; }
+.header-titles p { font-size: 11px; opacity: 0.65; letter-spacing: 0.06em; text-transform: uppercase; margin-top: 1px; }
+.header-amount {
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 99px;
+  padding: 6px 16px;
+  font-size: 13px; font-weight: 500;
+  white-space: nowrap;
+}
+.header-amount strong { color: #93c5fd; }
+
+/* STEP NAV */
+.step-nav {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  overflow-x: auto;
+}
+.step-nav-inner {
+  max-width: 980px; margin: 0 auto;
+  display: flex;
+  padding: 0 1.5rem;
+}
+.step-tab {
+  display: flex; align-items: center; gap: 8px;
+  padding: 14px 20px;
+  font-size: 13px; font-weight: 500;
+  color: var(--text3);
+  border-bottom: 3px solid transparent;
+  cursor: pointer; white-space: nowrap;
+  transition: all 0.2s;
+  position: relative;
+}
+.step-tab.active { color: var(--blue); border-bottom-color: var(--blue); }
+.step-tab.done { color: var(--text2); }
+.step-num {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--border); color: var(--text3);
+  font-size: 11px; font-weight: 600;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; transition: all 0.2s;
+}
+.step-tab.active .step-num { background: var(--blue); color: #fff; }
+.step-tab.done .step-num { background: var(--green); color: #fff; }
+
+/* ── CONTAINER ── */
+.container { max-width: 980px; margin: 0 auto; padding: 2rem 1.5rem 5rem; }
+
+/* ── SECTIONS ── */
+.sec { display: none; }
+.sec.active { display: block; animation: fadeUp 0.35s ease; }
+@keyframes fadeUp { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+
+/* ── SECTION HEADER ── */
+.sec-head {
+  margin-bottom: 1.75rem;
+  display: flex; align-items: flex-start; gap: 14px;
+}
+.sec-head-icon {
+  width: 48px; height: 48px; border-radius: 12px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px;
+}
+.ic-blue { background: var(--blue-light); }
+.ic-navy { background: var(--navy); color: #fff; }
+.ic-green { background: var(--green-dim); }
+.ic-gold { background: var(--amber-dim); }
+.sec-head-text h2 { font-family: 'DM Serif Display', serif; font-size: 1.4rem; color: var(--navy); letter-spacing: -0.01em; }
+.sec-head-text p { font-size: 13.5px; color: var(--text3); margin-top: 3px; line-height: 1.5; }
+
+/* ── CARD ── */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1.75rem;
+  box-shadow: var(--shadow);
+  margin-bottom: 1.25rem;
+}
+.card-title {
+  font-size: 13px; font-weight: 500; color: var(--text3);
+  text-transform: uppercase; letter-spacing: 0.07em;
+  margin-bottom: 1.25rem;
+  display: flex; align-items: center; gap: 8px;
+}
+.card-title::before { content: ''; display: block; width: 3px; height: 14px; background: var(--blue); border-radius: 2px; }
+
+/* ── AMOUNT DISPLAY ── */
+.amount-hero {
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy2) 100%);
+  border-radius: 14px;
+  padding: 2rem;
+  color: #fff;
+  text-align: center;
+  margin-bottom: 1.75rem;
+  position: relative; overflow: hidden;
+}
+.amount-hero::before {
+  content: '';
+  position: absolute; top: -40px; right: -40px;
+  width: 160px; height: 160px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.05);
+}
+.amount-label { font-size: 12px; opacity: 0.6; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 6px; }
+.amount-value { font-family: 'DM Serif Display', serif; font-size: 2.8rem; letter-spacing: -0.03em; color: #93c5fd; }
+.amount-sub { font-size: 12px; opacity: 0.55; margin-top: 4px; }
+
+/* ── PROFILE CARDS ── */
+.profile-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+@media (max-width: 600px) { .profile-grid { grid-template-columns: 1fr; } }
+
+.profile-card {
+  border: 2px solid var(--border);
+  border-radius: 14px;
+  padding: 1.5rem 1.25rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: var(--surface);
+  position: relative; overflow: hidden;
+  text-align: center;
+}
+.profile-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 4px;
+  opacity: 0; transition: opacity 0.2s;
+}
+.profile-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+.profile-card.selected { border-color: var(--blue); box-shadow: 0 0 0 4px rgba(26,86,219,0.12); }
+.profile-card.selected::before { opacity: 1; }
+.pc-conservador::before { background: linear-gradient(90deg, #1a56db, #3b82f6); }
+.pc-moderado::before { background: linear-gradient(90deg, #0ea5e9, #38bdf8); }
+.pc-agresivo::before { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+.pc-conservador.selected { border-color: #1a56db; box-shadow: 0 0 0 4px rgba(26,86,219,0.12); }
+.pc-moderado.selected { border-color: #0ea5e9; box-shadow: 0 0 0 4px rgba(14,165,233,0.12); }
+.pc-agresivo.selected { border-color: #f59e0b; box-shadow: 0 0 0 4px rgba(245,158,11,0.12); }
+
+.pc-emoji { font-size: 2.2rem; margin-bottom: 10px; display: block; }
+.pc-name { font-family: 'DM Serif Display', serif; font-size: 1.2rem; color: var(--navy); margin-bottom: 6px; }
+.pc-desc { font-size: 12.5px; color: var(--text3); line-height: 1.5; }
+.pc-alloc {
+  display: flex; justify-content: center; gap: 6px;
+  margin-top: 12px; flex-wrap: wrap;
+}
+.pc-pill {
+  font-size: 10px; font-weight: 500; padding: 2px 8px; border-radius: 99px;
+  font-family: 'DM Mono', monospace;
+}
+.pill-fija { background: #dbeafe; color: #1e40af; }
+.pill-var { background: #d1fae5; color: #065f46; }
+.pill-otros { background: #fef3c7; color: #92400e; }
+.pc-check {
+  position: absolute; top: 12px; right: 12px;
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--blue); color: #fff;
+  font-size: 12px;
+  display: none; align-items: center; justify-content: center;
+}
+.profile-card.selected .pc-check { display: flex; }
+
+/* ── CHARTS ── */
+.charts-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+@media (max-width: 600px) { .charts-row { grid-template-columns: 1fr; } }
+.chart-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+}
+.chart-box-title {
+  font-size: 12px; font-weight: 500; color: var(--text3);
+  text-transform: uppercase; letter-spacing: 0.07em;
+  margin-bottom: 1rem;
+}
+.chart-wrap { position: relative; height: 220px; }
+.legend-list { margin-top: 12px; display: flex; flex-direction: column; gap: 6px; }
+.legend-row { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text2); }
+.legend-dot { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+.legend-val { font-weight: 500; color: var(--text); margin-left: auto; font-family: 'DM Mono', monospace; font-size: 12px; }
+
+/* profile badge */
+.profile-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 8px 20px; border-radius: 99px;
+  font-size: 14px; font-weight: 500;
+  margin-bottom: 1.25rem;
+}
+.badge-conservador { background: #dbeafe; color: #1e40af; border: 1px solid #93c5fd; }
+.badge-moderado { background: #e0f2fe; color: #0c4a6e; border: 1px solid #7dd3fc; }
+.badge-agresivo { background: #fef3c7; color: #92400e; border: 1px solid #fcd34d; }
+
+/* ── INSTRUMENT GRID ── */
+.asset-section { margin-bottom: 1.5rem; }
+.asset-header {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 0; border-bottom: 2px solid var(--border);
+  margin-bottom: 1rem;
+}
+.asset-pill {
+  font-size: 12px; font-weight: 500; padding: 4px 14px;
+  border-radius: 99px; border: 1px solid;
+  font-family: 'DM Mono', monospace;
+}
+.ap-fija { background: #dbeafe; color: #1e40af; border-color: #93c5fd; }
+.ap-var { background: #d1fae5; color: #065f46; border-color: #6ee7b7; }
+.ap-otros { background: #fef3c7; color: #92400e; border-color: #fcd34d; }
+.asset-pct { font-size: 13px; color: var(--text3); margin-left: auto; font-family: 'DM Mono', monospace; }
+
+.inst-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px,1fr)); gap: 8px; }
+.inst-card {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 11px 13px;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  cursor: pointer;
+  background: var(--surface);
+  transition: all 0.15s;
+}
+.inst-card:hover { border-color: var(--border2); background: var(--surface2); }
+.inst-card.selected { border-color: var(--blue); background: var(--blue-pale); }
+.inst-cb {
+  width: 18px; height: 18px; border-radius: 4px;
+  border: 2px solid var(--border2);
+  flex-shrink: 0; margin-top: 1px;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s;
+}
+.inst-card.selected .inst-cb { background: var(--blue); border-color: var(--blue); }
+.inst-card.selected .inst-cb::after { content:'✓'; font-size:11px; color:#fff; font-weight:700; }
+.inst-info { flex:1; min-width:0; }
+.inst-ticker { font-size: 11px; color: var(--blue); font-weight: 600; font-family: 'DM Mono', monospace; letter-spacing: 0.04em; }
+.inst-name { font-size: 12.5px; color: var(--text); line-height: 1.35; }
+.inst-ytd {
+  font-size: 10px; font-weight: 600; font-family: 'DM Mono', monospace;
+  padding: 1px 6px; border-radius: 4px; margin-top: 3px;
+  display: inline-block;
+}
+.ytd-pos { background: var(--green-dim); color: #065f46; }
+.ytd-neg { background: var(--red-dim); color: #991b1b; }
+.sel-count { font-size: 12px; color: var(--text3); margin-top: 8px; }
+.sel-count strong { color: var(--blue); }
+
+/* ── RESULT CHARTS ── */
+.result-charts-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 1.5rem; }
+@media (max-width: 640px) { .result-charts-row { grid-template-columns: 1fr; } }
+
+/* ── TABLE ── */
+.port-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+.port-table th {
+  background: var(--navy);
+  color: #fff;
+  padding: 10px 14px;
+  text-align: left;
+  font-size: 11px; font-weight: 500;
+  letter-spacing: 0.06em; text-transform: uppercase;
+}
+.port-table th:first-child { border-radius: 8px 0 0 0; }
+.port-table th:last-child { border-radius: 0 8px 0 0; }
+.port-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); color: var(--text2); }
+.port-table tr:last-child td { border-bottom: none; }
+.port-table tr:nth-child(even) td { background: var(--surface2); }
+.port-table .td-ticker { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--blue); font-weight: 600; }
+.port-table .td-ytd {
+  font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 700;
+}
+.ytd-p { color: var(--green); }
+.ytd-n { color: var(--red); }
+.cat-row td { background: var(--navy) !important; color: #93c5fd !important; font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; padding: 6px 14px; }
+
+/* ── CTA FINAL ── */
+.cta-final {
+  background: linear-gradient(135deg, var(--navy) 0%, #1e3a8a 100%);
+  border-radius: 14px;
+  padding: 2rem;
+  text-align: center;
+  color: #fff;
+  margin-top: 1.5rem;
+  position: relative; overflow: hidden;
+}
+.cta-final::before {
+  content: '★';
+  position: absolute; right: 20px; top: 10px;
+  font-size: 80px; opacity: 0.04; color: #fff;
+}
+.cta-final h3 { font-family: 'DM Serif Display', serif; font-size: 1.4rem; margin-bottom: 0.75rem; color: #93c5fd; }
+.cta-final p { font-size: 14px; opacity: 0.85; line-height: 1.7; max-width: 520px; margin: 0 auto 1rem; }
+.cta-email { font-family: 'DM Mono', monospace; font-size: 15px; color: #fbbf24; font-weight: 600; }
+.cta-note { font-size: 12px; opacity: 0.6; margin-top: 8px; }
+
+/* ── BUTTONS ── */
+.btn-row { display: flex; justify-content: space-between; align-items: center; margin-top: 1.75rem; gap: 1rem; flex-wrap: wrap; }
+.btn {
+  padding: 10px 24px; border-radius: 8px;
+  font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500;
+  cursor: pointer; border: 1.5px solid var(--border2);
+  background: var(--surface); color: var(--text2);
+  transition: all 0.15s; display: inline-flex; align-items: center; gap: 7px;
+}
+.btn:hover { background: var(--surface2); color: var(--text); border-color: var(--border2); }
+.btn-primary { background: var(--blue); color: #fff; border-color: var(--blue); }
+.btn-primary:hover { background: var(--blue2); border-color: var(--blue2); color: #fff; }
+.btn-navy { background: var(--navy); color: #fff; border-color: var(--navy); }
+.btn-navy:hover { background: var(--navy2); color: #fff; }
+.btn-gold { background: var(--gold); color: #fff; border-color: var(--gold); font-weight: 600; }
+.btn-gold:hover { background: #d97706; border-color: #d97706; color: #fff; }
+.btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+/* ── MODAL PREVIEW ── */
+.modal-overlay {
+  display: none; position: fixed; inset: 0; z-index: 500;
+  background: rgba(11,31,75,0.6); backdrop-filter: blur(4px);
+  align-items: flex-start; justify-content: center;
+  overflow-y: auto; padding: 2rem 1rem;
+}
+.modal-overlay.open { display: flex; }
+.modal-box {
+  background: var(--surface); border-radius: 16px;
+  width: 100%; max-width: 800px; margin: auto;
+  overflow: hidden; box-shadow: var(--shadow-lg);
+  animation: fadeUp 0.3s ease;
+}
+.modal-head {
+  background: var(--navy);
+  padding: 1.1rem 1.5rem;
+  display: flex; align-items: center; justify-content: space-between;
+  color: #fff;
+}
+.modal-head-title { font-family: 'DM Serif Display', serif; font-size: 1.05rem; }
+.modal-actions { display: flex; gap: 8px; }
+.btn-sm { padding: 6px 16px; font-size: 12px; border-radius: 6px; }
+.modal-body { padding: 2rem; background: #fff; }
+
+/* ── PRINT DOC ── */
+.print-doc {
+  font-family: 'DM Sans', sans-serif;
+  color: #111; background: #fff;
+  font-size: 13px; line-height: 1.6;
+}
+.print-header {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  border-bottom: 3px solid #0b1f4b; padding-bottom: 1rem; margin-bottom: 1.5rem;
+}
+.print-logo { font-family: 'DM Serif Display', serif; font-size: 1.4rem; color: #0b1f4b; }
+.print-logo-sub { font-size: 11px; color: #64748b; margin-top: 2px; }
+.print-meta { text-align: right; font-size: 11px; color: #64748b; }
+.print-meta strong { display: block; font-size: 13px; color: #111; margin-bottom: 2px; }
+.print-profile-row {
+  background: #eff6ff; border-left: 4px solid #1a56db;
+  border-radius: 8px; padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+  display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap;
+}
+.print-profile-name { font-family: 'DM Serif Display', serif; font-size: 1.5rem; color: #0b1f4b; }
+.print-alloc-pills { display: flex; gap: 6px; margin-left: auto; flex-wrap: wrap; }
+.print-pill { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 99px; }
+.pp-fija { background: #dbeafe; color: #1e40af; }
+.pp-var { background: #d1fae5; color: #065f46; }
+.pp-otros { background: #fef3c7; color: #92400e; }
+.print-sec-title { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #64748b; margin-bottom: 8px; }
+.print-charts-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+.print-chart-box { border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem; }
+.print-chart-title { font-size: 11px; font-weight: 600; color: #64748b; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.06em; }
+.print-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-bottom: 1.5rem; }
+.print-table th { background: #0b1f4b; color: #fff; padding: 8px 12px; text-align: left; font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; }
+.print-table td { padding: 8px 12px; border-bottom: 1px solid #e2e8f0; color: #334155; }
+.print-table tr:last-child td { border-bottom: none; }
+.print-table tr:nth-child(even) td { background: #f8faff; }
+.print-cat-row td { background: #1e3a8a !important; color: #93c5fd !important; font-weight: 600; font-size: 10px; padding: 5px 12px; }
+.print-cta {
+  background: linear-gradient(135deg, #0b1f4b, #1e3a8a);
+  color: #fff; border-radius: 10px; padding: 1.25rem 1.5rem;
+  text-align: center; margin-top: 1.5rem;
+}
+.print-cta h4 { font-family: 'DM Serif Display', serif; font-size: 1.1rem; color: #93c5fd; margin-bottom: 6px; }
+.print-cta p { font-size: 12px; opacity: 0.85; }
+.print-cta .email { font-size: 14px; font-weight: 700; color: #fbbf24; margin: 4px 0; font-family: 'DM Mono', monospace; }
+.print-footer { margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid #e2e8f0; font-size: 10px; color: #94a3b8; display: flex; justify-content: space-between; }
+
+/* ── INFO BOX ── */
+.info-box {
+  background: var(--blue-pale); border: 1px solid #bfdbfe;
+  border-radius: 10px; padding: 12px 16px;
+  font-size: 13px; color: var(--navy2);
+  display: flex; gap: 10px; align-items: flex-start;
+  margin-bottom: 1.25rem; line-height: 1.55;
+}
+.info-icon { flex-shrink: 0; margin-top: 1px; font-size: 14px; }
+
+@media (max-width: 600px) {
+  .header-inner { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .container { padding: 1.5rem 1rem 4rem; }
+  .card { padding: 1.25rem; }
+  .btn-row { flex-direction: column; }
+  .btn-row .btn { width: 100%; justify-content: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══ HEADER ══ -->
+<header>
+  <div class="header-inner">
+    <div class="header-logo">
+      <div class="header-icon">📊</div>
+      <div class="header-titles">
+        <h1>Mi Primera Cartera de Inversión</h1>
+        <p>Finanzas e Inversiones · Primeros Pasos</p>
+      </div>
+    </div>
+    <div class="header-amount">Capital disponible: <strong>$5.000.000</strong></div>
+  </div>
+</header>
+
+<!-- STEP NAV -->
+<nav class="step-nav">
+  <div class="step-nav-inner">
+    <div class="step-tab active" id="tab-1" onclick="goTab(1)"><span class="step-num">1</span>Mi perfil</div>
+    <div class="step-tab" id="tab-2" onclick="goTab(2)"><span class="step-num">2</span>Mi allocación</div>
+    <div class="step-tab" id="tab-3" onclick="goTab(3)"><span class="step-num">3</span>Mis instrumentos</div>
+    <div class="step-tab" id="tab-4" onclick="goTab(4)"><span class="step-num">4</span>Mi cartera final</div>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════════════════════ -->
+<!-- SECCIÓN 1: PERFIL -->
+<!-- ══════════════════════════════════════════════════ -->
+<div class="container">
+<div class="sec active" id="sec-1">
+
+  <div class="sec-head">
+    <div class="sec-head-icon ic-blue">🎯</div>
+    <div class="sec-head-text">
+      <h2>Paso 1 — ¿Cuál es tu perfil de inversor?</h2>
+      <p>Tenés <strong>$5.000.000</strong> para invertir. Antes de elegir los instrumentos, necesitás conocer tu perfil. Seleccioná el que mejor te represente.</p>
+    </div>
+  </div>
+
+  <div class="amount-hero">
+    <div class="amount-label">Capital disponible para invertir</div>
+    <div class="amount-value">$5.000.000</div>
+    <div class="amount-sub">Pesos argentinos · Ejercicio de simulación educativa</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Seleccioná tu perfil</div>
+    <div class="profile-grid">
+      <div class="profile-card pc-conservador" id="pc-C" onclick="selectProfile('C')">
+        <span class="pc-check">✓</span>
+        <span class="pc-emoji">🛡</span>
+        <div class="pc-name">Conservador</div>
+        <div class="pc-desc">Priorizás la seguridad sobre el rendimiento. Tolerás poca volatilidad y buscás estabilidad.</div>
+        <div class="pc-alloc">
+          <span class="pc-pill pill-fija">Fija 75%</span>
+          <span class="pc-pill pill-var">Variable 20%</span>
+          <span class="pc-pill pill-otros">Otros 5%</span>
+        </div>
+      </div>
+      <div class="profile-card pc-moderado" id="pc-M" onclick="selectProfile('M')">
+        <span class="pc-check">✓</span>
+        <span class="pc-emoji">⚖</span>
+        <div class="pc-name">Moderado</div>
+        <div class="pc-desc">Buscás un equilibrio entre seguridad y crecimiento. Aceptás cierta volatilidad a cambio de mejores retornos.</div>
+        <div class="pc-alloc">
+          <span class="pc-pill pill-fija">Fija 65%</span>
+          <span class="pc-pill pill-var">Variable 30%</span>
+          <span class="pc-pill pill-otros">Otros 5%</span>
+        </div>
+      </div>
+      <div class="profile-card pc-agresivo" id="pc-A" onclick="selectProfile('A')">
+        <span class="pc-check">✓</span>
+        <span class="pc-emoji">🚀</span>
+        <div class="pc-name">Agresivo</div>
+        <div class="pc-desc">Buscás maximizar el rendimiento a largo plazo. Aceptás alta volatilidad con horizonte extenso.</div>
+        <div class="pc-alloc">
+          <span class="pc-pill pill-fija">Fija 55%</span>
+          <span class="pc-pill pill-var">Variable 40%</span>
+          <span class="pc-pill pill-otros">Otros 5%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="btn-row">
+    <div></div>
+    <button class="btn btn-primary" id="btn-to-2" onclick="goTab(2)" disabled>Ver mi allocación →</button>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════ -->
+<!-- SECCIÓN 2: GRÁFICOS -->
+<!-- ══════════════════════════════════════════════════ -->
+<div class="sec" id="sec-2">
+
+  <div class="sec-head">
+    <div class="sec-head-icon ic-navy">📈</div>
+    <div class="sec-head-text">
+      <h2>Paso 2 — Tu allocación recomendada</h2>
+      <p>Según tu perfil, así se distribuyen los $5.000.000 entre los distintos activos.</p>
+    </div>
+  </div>
+
+  <div class="card" style="text-align:center;margin-bottom:1.25rem">
+    <div id="profile-display-badge"></div>
+    <div id="alloc-amounts" style="display:flex;justify-content:center;gap:2rem;flex-wrap:wrap;margin-top:0.5rem"></div>
+  </div>
+
+  <div class="charts-row">
+    <div class="chart-box">
+      <div class="chart-box-title">Posición en el espectro de riesgo</div>
+      <div class="chart-wrap"><canvas id="bellChart"></canvas></div>
+      <div id="bell-labels" style="display:flex;justify-content:space-between;font-size:11px;color:var(--text3);margin-top:6px;font-family:'DM Mono',monospace">
+        <span>Conservador</span><span>Moderado</span><span>Agresivo</span>
+      </div>
+    </div>
+    <div class="chart-box">
+      <div class="chart-box-title">Distribución de activos</div>
+      <div class="chart-wrap"><canvas id="donutChart"></canvas></div>
+      <div class="legend-list" id="donut-legend"></div>
+    </div>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn" onclick="goTab(1)">← Cambiar perfil</button>
+    <button class="btn btn-primary" onclick="goTab(3)">Elegir instrumentos →</button>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════ -->
+<!-- SECCIÓN 3: INSTRUMENTOS -->
+<!-- ══════════════════════════════════════════════════ -->
+<div class="sec" id="sec-3">
+
+  <div class="sec-head">
+    <div class="sec-head-icon ic-green">🧩</div>
+    <div class="sec-head-text">
+      <h2>Paso 3 — Elegí tus instrumentos</h2>
+      <p>Seleccioná hasta <strong>5 instrumentos</strong> por categoría para construir tu cartera.</p>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <span class="info-icon">💡</span>
+    <span>Los rendimientos YTD (Year-to-Date) son <strong>valores de referencia educativa</strong> al momento de la actividad. Los datos reales pueden variar. Fuente de referencia: BYMA / Cotizaciones de mercado.</span>
+  </div>
+
+  <div id="instrument-sections"></div>
+
+  <div class="btn-row">
+    <button class="btn" onclick="goTab(2)">← Volver</button>
+    <button class="btn btn-primary" id="btn-to-4" onclick="buildResult()">Ver mi cartera →</button>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════ -->
+<!-- SECCIÓN 4: RESULTADO FINAL -->
+<!-- ══════════════════════════════════════════════════ -->
+<div class="sec" id="sec-4">
+
+  <div class="sec-head">
+    <div class="sec-head-icon ic-gold">🏆</div>
+    <div class="sec-head-text">
+      <h2>Paso 4 — Mi cartera de inversión</h2>
+      <p>Resultado final de tu ejercicio de construcción de cartera.</p>
+    </div>
+  </div>
+
+  <div class="result-charts-row">
+    <div class="chart-box">
+      <div class="chart-box-title">Distribución por Asset Class</div>
+      <div class="chart-wrap"><canvas id="resultDonut"></canvas></div>
+      <div class="legend-list" id="result-legend"></div>
+    </div>
+    <div class="chart-box">
+      <div class="chart-box-title">Instrumentos seleccionados por categoría</div>
+      <div class="chart-wrap"><canvas id="resultBar"></canvas></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Detalle de instrumentos y rendimiento YTD</div>
+    <div style="overflow-x:auto">
+      <table class="port-table" id="portfolio-table">
+        <thead>
+          <tr>
+            <th>Ticker</th>
+            <th>Instrumento</th>
+            <th>Categoría</th>
+            <th>Monto asignado</th>
+            <th>Rend. YTD</th>
+          </tr>
+        </thead>
+        <tbody id="portfolio-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="cta-final">
+    <h3>🎓 ¡Felicitaciones por completar el ejercicio!</h3>
+    <p>Este trabajo es el resultado de haber transitado el curso <strong>"Finanzas e Inversiones · Primeros Pasos"</strong>. Imprimí tu cartera en PDF y enviásela al profesor para su evaluación.</p>
+    <div class="cta-email">cdr.fin.plus@gmail.com</div>
+    <p class="cta-note">Enviá el PDF generado a esta dirección de correo indicando tu nombre y comisión.</p>
+  </div>
+
+  <div class="btn-row" style="justify-content:center;gap:1rem;margin-top:1.5rem">
+    <button class="btn" onclick="goTab(3)">← Modificar instrumentos</button>
+    <button class="btn btn-navy" onclick="openPreview()">👁 Vista previa</button>
+    <button class="btn btn-gold" onclick="directPrint()">🖨 Imprimir PDF</button>
+  </div>
+</div>
+
+</div><!-- /container -->
+
+<!-- ══ MODAL PREVIEW ══ -->
+<div class="modal-overlay" id="preview-modal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <div class="modal-head-title">📄 Vista previa del reporte</div>
+      <div class="modal-actions">
+        <button class="btn btn-sm" onclick="closePreview()" style="background:rgba(255,255,255,0.1);color:#fff;border-color:rgba(255,255,255,0.2)">Cerrar</button>
+        <button class="btn btn-sm btn-gold" onclick="directPrint()">🖨 Imprimir PDF</button>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="print-doc" id="print-preview-content"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PRINT IFRAME (hidden) ══ -->
+<iframe id="print-frame" style="display:none"></iframe>
+
+<script>
+// ══════════════════════════════════════════════════════
+// DATA
+// ══════════════════════════════════════════════════════
+const TOTAL = 5000000;
+const profiles = {
+  C: { name:'Conservador', emoji:'🛡', alloc:[75,20,5], badgeClass:'badge-conservador', bellPos:0.15, colors:['#1a56db','#10b981','#f59e0b'] },
+  M: { name:'Moderado',    emoji:'⚖', alloc:[65,30,5], badgeClass:'badge-moderado',    bellPos:0.50, colors:['#1a56db','#10b981','#f59e0b'] },
+  A: { name:'Agresivo',    emoji:'🚀', alloc:[55,40,5], badgeClass:'badge-agresivo',    bellPos:0.85, colors:['#1a56db','#10b981','#f59e0b'] }
+};
+
+const instruments = {
+  fija: [
+    { ticker:'AL30',   name:'Bono Soberano USD Ley ARG 2030', ytd:+18.4, ytdLabel:'+18.4%' },
+    { ticker:'GD30',   name:'Bono Soberano USD Ley NY 2030',  ytd:+21.7, ytdLabel:'+21.7%' },
+    { ticker:'TX26',   name:'Boncer 2026 (ajuste CER)',        ytd:+38.2, ytdLabel:'+38.2%' },
+    { ticker:'YCA6O',  name:'ON YPF USD vto. 2026',           ytd:+14.8, ytdLabel:'+14.8%' },
+    { ticker:'TGS2O',  name:'ON Transportadora Gas Sur USD',  ytd:+12.3, ytdLabel:'+12.3%' },
+    { ticker:'MRCAO',  name:'ON Mercado Libre USD',           ytd:+9.6,  ytdLabel:'+9.6%'  },
+    { ticker:'FCI MM', name:'FCI Money Market (T+0)',         ytd:+72.1, ytdLabel:'+72.1%' },
+    { ticker:'LECAP',  name:'Letra Capitalizable del Tesoro', ytd:+64.3, ytdLabel:'+64.3%' },
+  ],
+  variable: [
+    { ticker:'GGAL',   name:'Grupo Financiero Galicia',       ytd:+142.3, ytdLabel:'+142.3%' },
+    { ticker:'YPF',    name:'YPF S.A.',                       ytd:+87.4,  ytdLabel:'+87.4%'  },
+    { ticker:'PAMP',   name:'Pampa Energía',                  ytd:+96.1,  ytdLabel:'+96.1%'  },
+    { ticker:'TECO2',  name:'Telecom Argentina',              ytd:+63.8,  ytdLabel:'+63.8%'  },
+    { ticker:'BMA',    name:'Banco Macro',                    ytd:+118.5, ytdLabel:'+118.5%' },
+    { ticker:'MSFT',   name:'Microsoft (Cedear)',             ytd:+15.2,  ytdLabel:'+15.2%'  },
+    { ticker:'SPY',    name:'ETF S&P 500 (Cedear)',           ytd:+22.8,  ytdLabel:'+22.8%'  },
+    { ticker:'NVDA',   name:'NVIDIA (Cedear)',                ytd:+134.7, ytdLabel:'+134.7%' },
+  ],
+  otros: [
+    { ticker:'GLD',    name:'SPDR Gold Trust (Cedear - Oro)', ytd:+28.3, ytdLabel:'+28.3%' },
+    { ticker:'MEP',    name:'Dólar MEP (AL30 contado)',       ytd:+19.6, ytdLabel:'+19.6%' },
+    { ticker:'BTC',    name:'Bitcoin (referencia Cedear)',    ytd:+62.4, ytdLabel:'+62.4%' },
+    { ticker:'IWM',    name:'iShares Russell 2000 (Cedear)',  ytd:+11.7, ytdLabel:'+11.7%' },
+  ]
+};
+
+// ── STATE ──
+let currentProfile = null;
+let selectedInstruments = { fija:[], variable:[], otros:[] };
+let bellChart=null, donutChart=null, resultDonut=null, resultBar=null;
+let currentTab = 1;
+
+// ══════════════════════════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════════════════════════
+function goTab(n) {
+  if (n === 2 && !currentProfile) return;
+  for (let i=1;i<=4;i++) {
+    document.getElementById('sec-'+i).classList.toggle('active', i===n);
+    const tab = document.getElementById('tab-'+i);
+    tab.classList.toggle('active', i===n);
+    tab.classList.toggle('done', i<n);
+  }
+  currentTab = n;
+  window.scrollTo({ top:0, behavior:'smooth' });
+}
+
+// ══════════════════════════════════════════════════════
+// PROFILE SELECTION
+// ══════════════════════════════════════════════════════
+function selectProfile(key) {
+  currentProfile = key;
+  ['C','M','A'].forEach(k => document.getElementById('pc-'+k).classList.toggle('selected', k===key));
+  document.getElementById('btn-to-2').disabled = false;
+  buildSection2();
+}
+
+function buildSection2() {
+  const p = profiles[currentProfile];
+  // Badge
+  document.getElementById('profile-display-badge').innerHTML =
+    `<span class="profile-badge ${p.badgeClass}">${p.emoji} Perfil ${p.name}</span>`;
+  // Amounts
+  const labels = ['Renta Fija','Renta Variable','Otros'];
+  const amtDiv = document.getElementById('alloc-amounts');
+  amtDiv.innerHTML = p.alloc.map((pct,i)=>`
+    <div style="text-align:center">
+      <div style="font-family:'DM Mono',monospace;font-size:1.6rem;font-weight:600;color:${p.colors[i]}">${pct}%</div>
+      <div style="font-size:11px;color:var(--text3)">${labels[i]}</div>
+      <div style="font-size:12px;color:var(--text2);font-weight:500">$${fmt(TOTAL*pct/100)}</div>
+    </div>`).join('');
+  buildBell();
+  buildDonut();
+}
+
+function buildBell() {
+  const ctx = document.getElementById('bellChart').getContext('2d');
+  if (bellChart) bellChart.destroy();
+  const pts=[],labels=[];
+  for(let x=-3.5;x<=3.5;x+=0.07){
+    pts.push(Math.exp(-0.5*x*x)/Math.sqrt(2*Math.PI));
+    labels.push(x.toFixed(2));
+  }
+  const pos = profiles[currentProfile].bellPos;
+  const xN = (pos-0.5)*6;
+  const ptIdx = labels.findIndex(l=>parseFloat(l)>=xN);
+  const dotColor = currentProfile==='C'?'#1a56db':currentProfile==='M'?'#0ea5e9':'#f59e0b';
+  bellChart = new Chart(ctx,{
+    type:'line',
+    data:{ labels, datasets:[
+      { data:pts, borderColor:'#1a56db', borderWidth:2.5, fill:true,
+        backgroundColor:'rgba(26,86,219,0.08)', pointRadius:0, tension:0.4 },
+      { data:pts.map((v,i)=>i===ptIdx?v:null),
+        pointRadius:pts.map((v,i)=>i===ptIdx?10:0),
+        pointBackgroundColor:dotColor, pointBorderColor:'#fff', pointBorderWidth:3,
+        showLine:false, borderWidth:0 }
+    ]},
+    options:{ responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{display:false}, tooltip:{enabled:false} },
+      scales:{
+        x:{ display:true, ticks:{ maxTicksLimit:3, color:'#94a3b8', font:{size:10},
+          callback:(v,i)=>({0:'Conservador',50:'Moderado',99:'Agresivo'}[i]||'') },
+          grid:{display:false}, border:{display:false} },
+        y:{ display:false }
+      }, layout:{padding:{top:12}} }
+  });
+}
+
+function buildDonut() {
+  const ctx = document.getElementById('donutChart').getContext('2d');
+  if (donutChart) donutChart.destroy();
+  const p = profiles[currentProfile];
+  const labels=['Renta Fija','Renta Variable','Otros'];
+  donutChart = new Chart(ctx,{
+    type:'doughnut',
+    data:{ labels, datasets:[{ data:p.alloc, backgroundColor:p.colors, borderWidth:0, hoverOffset:5 }] },
+    options:{ responsive:true, maintainAspectRatio:false, cutout:'66%',
+      plugins:{ legend:{display:false}, tooltip:{callbacks:{label:c=>` ${c.label}: ${c.parsed}%`}} } }
+  });
+  document.getElementById('donut-legend').innerHTML = labels.map((l,i)=>`
+    <div class="legend-row">
+      <div class="legend-dot" style="background:${p.colors[i]}"></div>
+      <span>${l}</span>
+      <span class="legend-val">${p.alloc[i]}%  ·  $${fmt(TOTAL*p.alloc[i]/100)}</span>
+    </div>`).join('');
+}
+
+// ══════════════════════════════════════════════════════
+// INSTRUMENTS
+// ══════════════════════════════════════════════════════
+function buildInstrumentSections() {
+  const p = profiles[currentProfile];
+  const cats = [
+    { key:'fija',     label:'Renta Fija',     pillClass:'ap-fija',  pct:p.alloc[0], max:5 },
+    { key:'variable', label:'Renta Variable',  pillClass:'ap-var',   pct:p.alloc[1], max:5 },
+    { key:'otros',    label:'Otros',           pillClass:'ap-otros', pct:p.alloc[2], max:2 }
+  ];
+  const cont = document.getElementById('instrument-sections');
+  cont.innerHTML = '';
+  cats.forEach(cat=>{
+    const sec = document.createElement('div');
+    sec.className = 'asset-section';
+    sec.innerHTML = `
+      <div class="asset-header">
+        <span class="asset-pill ${cat.pillClass}">${cat.label}</span>
+        <span style="font-size:13px;color:var(--text3)">$${fmt(TOTAL*cat.pct/100)} (${cat.pct}%)</span>
+        <span class="asset-pct">Máx. ${cat.max} instrumentos</span>
+      </div>
+      <div class="inst-grid" id="grid-${cat.key}"></div>
+      <div class="sel-count" id="count-${cat.key}">Seleccionados: <strong>0 / ${cat.max}</strong></div>
+    `;
+    cont.appendChild(sec);
+    const grid = sec.querySelector(`#grid-${cat.key}`);
+    instruments[cat.key].forEach(inst=>{
+      const card = document.createElement('div');
+      card.className = 'inst-card' + (selectedInstruments[cat.key].includes(inst.ticker)?' selected':'');
+      card.dataset.ticker = inst.ticker;
+      card.dataset.cat = cat.key;
+      card.dataset.max = cat.max;
+      card.innerHTML = `
+        <div class="inst-cb"></div>
+        <div class="inst-info">
+          <div class="inst-ticker">${inst.ticker}</div>
+          <div class="inst-name">${inst.name}</div>
+          <span class="inst-ytd ${inst.ytd>=0?'ytd-pos':'ytd-neg'}">${inst.ytdLabel} YTD</span>
+        </div>`;
+      card.onclick = ()=>toggleInstrument(card, cat.key, cat.max);
+      grid.appendChild(card);
+    });
+    updateCount(cat.key, cat.max);
+  });
+}
+
+function toggleInstrument(card, catKey, max) {
+  const ticker = card.dataset.ticker;
+  const sel = selectedInstruments[catKey];
+  if (card.classList.contains('selected')) {
+    card.classList.remove('selected');
+    selectedInstruments[catKey] = sel.filter(t=>t!==ticker);
+  } else {
+    if (sel.length >= max) { alert(`Podés seleccionar como máximo ${max} instrumentos en esta categoría.`); return; }
+    card.classList.add('selected');
+    selectedInstruments[catKey].push(ticker);
+  }
+  updateCount(catKey, max);
+}
+
+function updateCount(catKey, max) {
+  const n = selectedInstruments[catKey].length;
+  const el = document.getElementById('count-'+catKey);
+  if (el) el.innerHTML = `Seleccionados: <strong>${n} / ${max}</strong>`;
+}
+
+// ══════════════════════════════════════════════════════
+// RESULT BUILD
+// ══════════════════════════════════════════════════════
+function buildResult() {
+  const total = selectedInstruments.fija.length + selectedInstruments.variable.length + selectedInstruments.otros.length;
+  if (total === 0) { alert('Seleccioná al menos un instrumento para continuar.'); return; }
+  buildResultCharts();
+  buildPortfolioTable();
+  goTab(4);
+}
+
+function getSelectedData() {
+  const p = profiles[currentProfile];
+  const allData = [];
+  const cats = [
+    { key:'fija',     label:'Renta Fija',    pct:p.alloc[0], color:'#1a56db' },
+    { key:'variable', label:'Renta Variable', pct:p.alloc[1], color:'#10b981' },
+    { key:'otros',    label:'Otros',          pct:p.alloc[2], color:'#f59e0b' }
+  ];
+  cats.forEach(cat=>{
+    const tickers = selectedInstruments[cat.key];
+    if (!tickers.length) return;
+    const catAmt = TOTAL * cat.pct / 100;
+    const perInst = catAmt / tickers.length;
+    tickers.forEach(ticker=>{
+      const inst = instruments[cat.key].find(i=>i.ticker===ticker);
+      if (inst) allData.push({ ...inst, cat:cat.label, catKey:cat.key, color:cat.color, amt:perInst });
+    });
+  });
+  return allData;
+}
+
+function buildResultCharts() {
+  const p = profiles[currentProfile];
+  // Donut
+  const ctx1 = document.getElementById('resultDonut').getContext('2d');
+  if (resultDonut) resultDonut.destroy();
+  resultDonut = new Chart(ctx1,{
+    type:'doughnut',
+    data:{ labels:['Renta Fija','Renta Variable','Otros'],
+      datasets:[{ data:p.alloc, backgroundColor:p.colors, borderWidth:0, hoverOffset:5 }] },
+    options:{ responsive:true, maintainAspectRatio:false, cutout:'62%',
+      plugins:{ legend:{display:false}, tooltip:{callbacks:{label:c=>` ${c.label}: ${c.parsed}%`}} } }
+  });
+  document.getElementById('result-legend').innerHTML = ['Renta Fija','Renta Variable','Otros'].map((l,i)=>`
+    <div class="legend-row">
+      <div class="legend-dot" style="background:${p.colors[i]}"></div>
+      <span>${l}</span>
+      <span class="legend-val">${p.alloc[i]}%</span>
+    </div>`).join('');
+
+  // Bar by instrument
+  const data = getSelectedData();
+  const ctx2 = document.getElementById('resultBar').getContext('2d');
+  if (resultBar) resultBar.destroy();
+  resultBar = new Chart(ctx2,{
+    type:'bar',
+    data:{
+      labels: data.map(d=>d.ticker),
+      datasets:[{
+        label:'Monto ($)',
+        data: data.map(d=>Math.round(d.amt)),
+        backgroundColor: data.map(d=>d.color+'cc'),
+        borderColor: data.map(d=>d.color),
+        borderWidth:1.5, borderRadius:4
+      }]
+    },
+    options:{ responsive:true, maintainAspectRatio:false, indexAxis:'y',
+      plugins:{ legend:{display:false}, tooltip:{ callbacks:{
+        label: c=>' $'+fmt(c.parsed)
+      }}},
+      scales:{
+        x:{ ticks:{color:'#94a3b8',font:{size:10},callback:v=>'$'+fmt(v)}, grid:{color:'#f1f5f9'}, border:{display:false} },
+        y:{ ticks:{color:'#334155',font:{size:11,family:"'DM Mono',monospace"}}, grid:{display:false}, border:{display:false} }
+      }
+    }
+  });
+}
+
+function buildPortfolioTable() {
+  const data = getSelectedData();
+  const tbody = document.getElementById('portfolio-tbody');
+  tbody.innerHTML = '';
+  let lastCat = '';
+  data.forEach(d=>{
+    if (d.cat !== lastCat) {
+      const tr = document.createElement('tr');
+      tr.className = 'cat-row';
+      tr.innerHTML = `<td colspan="5">${d.cat}</td>`;
+      tbody.appendChild(tr);
+      lastCat = d.cat;
+    }
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td class="td-ticker">${d.ticker}</td>
+      <td>${d.name}</td>
+      <td>${d.cat}</td>
+      <td style="font-family:'DM Mono',monospace;font-size:12px">$${fmt(d.amt)}</td>
+      <td class="td-ytd ${d.ytd>=0?'ytd-p':'ytd-n'}">${d.ytdLabel}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+// ══════════════════════════════════════════════════════
+// PREVIEW & PRINT
+// ══════════════════════════════════════════════════════
+function openPreview() {
+  buildPrintContent();
+  document.getElementById('preview-modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closePreview() {
+  document.getElementById('preview-modal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.getElementById('preview-modal').addEventListener('click', function(e){ if(e.target===this) closePreview(); });
+
+function buildPrintContent() {
+  const p = profiles[currentProfile];
+  const data = getSelectedData();
+  const fecha = new Date().toLocaleDateString('es-AR',{day:'2-digit',month:'long',year:'numeric'});
+
+  let tableRows = '';
+  let lastCat = '';
+  data.forEach(d=>{
+    if(d.cat!==lastCat){ tableRows+=`<tr class="print-cat-row"><td colspan="5">${d.cat}</td></tr>`; lastCat=d.cat; }
+    tableRows+=`<tr>
+      <td style="font-family:'DM Mono',monospace;color:#1a56db;font-weight:700;font-size:11px">${d.ticker}</td>
+      <td>${d.name}</td>
+      <td>${d.cat}</td>
+      <td style="font-family:'DM Mono',monospace;font-size:11px">$${fmt(d.amt)}</td>
+      <td style="font-family:'DM Mono',monospace;font-weight:700;color:${d.ytd>=0?'#059669':'#dc2626'};font-size:11px">${d.ytdLabel}</td>
+    </tr>`;
+  });
+
+  document.getElementById('print-preview-content').innerHTML = `
+    <div class="print-header">
+      <div>
+        <div class="print-logo">📊 Mi Primera Cartera de Inversión</div>
+        <div class="print-logo-sub">Finanzas e Inversiones · Primeros Pasos</div>
+      </div>
+      <div class="print-meta">
+        <strong>Ejercicio de simulación</strong>
+        Capital disponible: $${fmt(TOTAL)}<br>
+        Fecha: ${fecha}
+      </div>
+    </div>
+
+    <div class="print-profile-row">
+      <div>
+        <div style="font-size:11px;color:#4b6aad;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px">Perfil seleccionado</div>
+        <div class="print-profile-name">${p.emoji} ${p.name}</div>
+      </div>
+      <div class="print-alloc-pills">
+        <span class="print-pill pp-fija">Renta Fija ${p.alloc[0]}%  ·  $${fmt(TOTAL*p.alloc[0]/100)}</span>
+        <span class="print-pill pp-var">Renta Variable ${p.alloc[1]}%  ·  $${fmt(TOTAL*p.alloc[1]/100)}</span>
+        <span class="print-pill pp-otros">Otros ${p.alloc[2]}%  ·  $${fmt(TOTAL*p.alloc[2]/100)}</span>
+      </div>
+    </div>
+
+    <div class="print-sec-title">Composición de la cartera · Distribución por activos</div>
+    <div style="background:#eff6ff;border-radius:8px;padding:1rem;margin-bottom:1.5rem">
+      <div style="display:flex;gap:2rem;justify-content:center;flex-wrap:wrap">
+        ${['Renta Fija','Renta Variable','Otros'].map((l,i)=>`
+          <div style="text-align:center">
+            <div style="font-size:1.4rem;font-weight:700;color:${p.colors[i]};font-family:'DM Mono',monospace">${p.alloc[i]}%</div>
+            <div style="font-size:11px;color:#64748b">${l}</div>
+            <div style="font-size:12px;color:#1e293b;font-weight:600">$${fmt(TOTAL*p.alloc[i]/100)}</div>
+          </div>`).join('')}
+      </div>
+    </div>
+
+    <div class="print-sec-title">Instrumentos seleccionados y rendimiento YTD</div>
+    <table class="print-table">
+      <thead>
+        <tr><th>Ticker</th><th>Instrumento</th><th>Categoría</th><th>Monto asignado</th><th>Rend. YTD</th></tr>
+      </thead>
+      <tbody>${tableRows}</tbody>
+    </table>
+
+    <div class="print-cta">
+      <h4>🎓 ¡Felicitaciones por completar el ejercicio!</h4>
+      <p>Este trabajo es el resultado de haber transitado el curso <strong>"Finanzas e Inversiones · Primeros Pasos"</strong>.<br>Enviá este PDF al profesor para su evaluación.</p>
+      <div class="email">cdr.fin.plus@gmail.com</div>
+      <p style="font-size:11px;opacity:0.7;margin-top:4px">Indicá tu nombre completo y comisión en el asunto del correo.</p>
+    </div>
+
+    <div class="print-footer">
+      <span>Ejercicio educativo de simulación · No constituye asesoramiento financiero</span>
+      <span>Generado el ${fecha}</span>
+    </div>
+  `;
+}
+
+function directPrint() {
+  buildPrintContent();
+  const content = document.getElementById('print-preview-content').innerHTML;
+  const win = window.open('','_blank','width=900,height=700');
+  win.document.write(`<!DOCTYPE html><html lang="es"><head>
+<meta charset="UTF-8">
+<title>Mi Primera Cartera · ${profiles[currentProfile].name}</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:#fff;color:#111;padding:2cm;font-size:13px;line-height:1.6;}
+.print-header{display:flex;align-items:flex-start;justify-content:space-between;border-bottom:3px solid #0b1f4b;padding-bottom:1rem;margin-bottom:1.5rem;}
+.print-logo{font-family:'DM Serif Display',serif;font-size:1.4rem;color:#0b1f4b;}
+.print-logo-sub{font-size:11px;color:#64748b;margin-top:2px;}
+.print-meta{text-align:right;font-size:11px;color:#64748b;}
+.print-meta strong{display:block;font-size:13px;color:#111;margin-bottom:2px;}
+.print-profile-row{background:#eff6ff;border-left:4px solid #1a56db;border-radius:8px;padding:1rem 1.25rem;margin-bottom:1.5rem;display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;}
+.print-profile-name{font-family:'DM Serif Display',serif;font-size:1.5rem;color:#0b1f4b;}
+.print-alloc-pills{display:flex;gap:6px;margin-left:auto;flex-wrap:wrap;}
+.print-pill{font-size:11px;font-weight:600;padding:3px 10px;border-radius:99px;}
+.pp-fija{background:#dbeafe;color:#1e40af;}
+.pp-var{background:#d1fae5;color:#065f46;}
+.pp-otros{background:#fef3c7;color:#92400e;}
+.print-sec-title{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#64748b;margin-bottom:8px;}
+.print-table{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:1.5rem;}
+.print-table th{background:#0b1f4b;color:#fff;padding:8px 12px;text-align:left;font-size:10px;letter-spacing:.06em;text-transform:uppercase;}
+.print-table td{padding:8px 12px;border-bottom:1px solid #e2e8f0;color:#334155;}
+.print-table tr:last-child td{border-bottom:none;}
+.print-table tr:nth-child(even) td{background:#f8faff;}
+.print-cat-row td{background:#1e3a8a!important;color:#93c5fd!important;font-weight:600;font-size:10px;padding:5px 12px;}
+.print-cta{background:linear-gradient(135deg,#0b1f4b,#1e3a8a);color:#fff;border-radius:10px;padding:1.25rem 1.5rem;text-align:center;margin-top:1.5rem;}
+.print-cta h4{font-family:'DM Serif Display',serif;font-size:1.1rem;color:#93c5fd;margin-bottom:6px;}
+.print-cta p{font-size:12px;opacity:.85;}
+.print-cta .email{font-size:14px;font-weight:700;color:#fbbf24;margin:4px 0;font-family:'DM Mono',monospace;}
+.print-footer{margin-top:1.5rem;padding-top:1rem;border-top:1px solid #e2e8f0;font-size:10px;color:#94a3b8;display:flex;justify-content:space-between;}
+@media print{body{padding:1.5cm;}}
+</style></head><body>${content}</body></html>`);
+  win.document.close();
+  win.onload = ()=>{ win.focus(); win.print(); };
+}
+
+// ══════════════════════════════════════════════════════
+// HELPERS
+// ══════════════════════════════════════════════════════
+function fmt(n) {
+  return Math.round(n).toLocaleString('es-AR');
+}
+
+// INIT
+(function() {
+  // Pre-build instruments on tab 3 click
+  const origGoTab = goTab;
+  const tabs = [1,2,3,4];
+  document.querySelectorAll('.step-tab').forEach((el,i)=>{
+    el.addEventListener('click', ()=>{
+      if (i+1===3 && currentProfile) buildInstrumentSections();
+    });
+  });
+})();
+
+// Override goTab to also build instruments when navigating to sec-3
+const _goTab = goTab;
+function goTab(n) {
+  if (n===2 && !currentProfile) { alert('Seleccioná tu perfil primero.'); return; }
+  if (n>=3 && !currentProfile) return;
+  for(let i=1;i<=4;i++){
+    document.getElementById('sec-'+i).classList.toggle('active',i===n);
+    const tab=document.getElementById('tab-'+i);
+    tab.classList.toggle('active',i===n);
+    tab.classList.toggle('done',i<n);
+  }
+  currentTab=n;
+  if(n===3) buildInstrumentSections();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+</body>
+</html>
